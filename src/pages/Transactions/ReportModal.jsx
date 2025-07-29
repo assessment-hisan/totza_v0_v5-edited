@@ -16,8 +16,7 @@ const ReportModal = ({ transactions, onClose }) => {
     .filter((t) => ["Debit", "Due"].includes(t.type))
     .reduce((sum, t) => sum + t.amount, 0)
 
-  // const totalLoans = transactions.filter((t) => t.type === "Loan").reduce((sum, t) => sum + t.amount, 0)
-useEffect(()=>{console.log(transactions, totalIncome)},[])
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

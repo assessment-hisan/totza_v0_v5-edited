@@ -12,6 +12,8 @@ import { generateTransactionsPDF } from "../../utils/pdfHelpers"
 import TransactionTable from "../../components/TransactionTable"
 
 const Transactions = () => {
+const vendors = useStore(state => state.vendors)
+
   const { transactions, deleteTransaction } = useStore()
   const [showAddModal, setShowAddModal] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
@@ -32,8 +34,10 @@ const Transactions = () => {
 
   // Simulate loading
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800)
+      
+    const timer = setTimeout(() => setIsLoading(false), 100)
     return () => clearTimeout(timer)
+  
   }, [])
 
   // Memoized filtered transactions
@@ -73,7 +77,7 @@ const Transactions = () => {
         const toDate = endOfDay(new Date(filters.dateTo))
         if (transactionDate > toDate) return false
       }
-      console.log(transactions)
+   
       return true
     })
   }, [transactions, filters])

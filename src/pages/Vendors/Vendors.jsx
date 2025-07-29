@@ -16,7 +16,7 @@ const Vendors = () => {
   const [selectedVendor, setSelectedVendor] = useState(null)
 
   const getVendorTransactions = (vendorId) => {
-    return transactions.filter((t) => t.vendorId === vendorId)
+    return transactions.filter((t) => t.linkedVendor === vendorId)
   }
 
   const columns = [
