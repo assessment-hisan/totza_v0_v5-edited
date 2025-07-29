@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useStore } from "../../stores/useStore"
 import { Plus, Download, Eye } from "lucide-react"
 import Modal from "../../components/Modal"
@@ -15,7 +15,7 @@ const Partners = () => {
   const [selectedPartner, setSelectedPartner] = useState(null)
 
   const getPartnerTransactions = (partnerId) => {
-    return transactions.filter((t) => t.partnerId === partnerId)
+    return transactions.filter((t) => t.linkedPartner === partnerId)
   }
 
   const columns = [
@@ -70,7 +70,7 @@ const Partners = () => {
       ),
     },
   ]
-
+ useEffect(()=>{console.log( transactions ,partners, getPartnerTransactions(selectedPartner))},[])
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

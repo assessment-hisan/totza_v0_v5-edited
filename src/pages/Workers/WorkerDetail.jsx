@@ -7,7 +7,7 @@ import TransactionTable from "../../components/TransactionTable"
 const WorkerDetail = ({ worker, onClose }) => {
   const { transactions } = useStore()
 
-  const workerTransactions = transactions.filter((t) => t.workerId === worker.id)
+  const workerTransactions = transactions.filter((t) => t.linkedWorker === worker.id)
 
   const totalAmount = workerTransactions.reduce((sum, t) => sum + t.amount, 0)
 

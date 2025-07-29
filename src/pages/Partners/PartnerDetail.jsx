@@ -7,7 +7,7 @@ import { generateEntityTransactionsPDF } from "../../utils/pdfHelpers"
 const PartnerDetail = ({ partner, onClose }) => {
   const { transactions } = useStore()
 
-  const partnerTransactions = transactions.filter((t) => t.partnerId === partner.id)
+  const partnerTransactions = transactions.filter((t) => t.linkedPartner === partner.id)
 
   const totalAmount = partnerTransactions.reduce((sum, t) => sum + t.amount, 0)
 

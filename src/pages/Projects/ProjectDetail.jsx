@@ -7,7 +7,7 @@ import { generateProjectDetailPDF } from "../../utils/pdfHelpers"
 const ProjectDetail = ({ project, onClose }) => {
   const { transactions } = useStore()
 
-  const projectTransactions = transactions.filter((t) => t.projectId === project.id)
+  const projectTransactions = transactions.filter((t) => t.linkedProject === project.id)
 
   const totalIncome = projectTransactions.filter((t) => t.type === "Income").reduce((sum, t) => sum + t.amount, 0)
 

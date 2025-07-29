@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useStore } from "../../stores/useStore"
 import { Plus, Download, Eye } from "lucide-react"
 import Modal from "../../components/Modal"
@@ -72,7 +72,7 @@ const Workers = () => {
       ),
     },
   ]
-
+ useEffect(()=>{console.log(workers[0])},[])
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

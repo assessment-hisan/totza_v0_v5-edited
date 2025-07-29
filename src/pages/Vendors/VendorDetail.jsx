@@ -8,7 +8,7 @@ import Table from "../../components/Table"
 const VendorDetail = ({ vendor, onClose }) => {
   const { transactions } = useStore()
 
-  const vendorTransactions = transactions.filter((t) => t.vendorId === vendor.id)
+  const vendorTransactions = transactions.filter((t) => t.linkedVendor === vendor.id)
 
   const totalAmount = vendorTransactions.reduce((sum, t) => sum + t.amount, 0)
 
