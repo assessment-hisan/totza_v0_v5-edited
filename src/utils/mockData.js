@@ -1,239 +1,239 @@
 import { v4 as uuidv4 } from "uuid"
 import { subDays, format, addDays } from "date-fns"
 
-const generateId = () => uuidv4()
-const safeName = (arr, idx, key = 'name') => arr?.[idx]?.[key] || 'N/A'
-// Enhanced Partners with more realistic data
-const partners = [
-  {
-    id: generateId(),
-    name: "John Smith",
-    type: "Individual Partner",
-    contactPerson: "John Smith",
-    email: "john.smith@business.com",
-    phone: "+91-98765-43210",
-    investmentAmount: 500000,
-    partnershipDate: "2023-06-15",
-    address: "123 Business District, Mumbai, MH 400001"
-  },
+// const generateId = () => uuidv4()
+// const safeName = (arr, idx, key = 'name') => arr?.[idx]?.[key] || 'N/A'
+// // Enhanced Partners with more realistic data
+// const partners = [
+//   {
+//     id: generateId(),
+//     name: "John Smith",
+//     type: "Individual Partner",
+//     contactPerson: "John Smith",
+//     email: "john.smith@business.com",
+//     phone: "+91-98765-43210",
+//     investmentAmount: 500000,
+//     partnershipDate: "2023-06-15",
+//     address: "123 Business District, Mumbai, MH 400001"
+//   },
   
-  {
-    id: generateId(),
-    name: "Jafar ms",
-    type: "Financial Partner",
-    contactPerson: "jafar ms",
-    email: "jafar@gmail.com",
-    phone: "+91-98765-43212",
-    investmentAmount: 750000,
-    partnershipDate: "2023-09-10",
-    address: "789 Finance Street, Delhi, DL 110001"
-  },
-]
+//   {
+//     id: generateId(),
+//     name: "Jafar ms",
+//     type: "Financial Partner",
+//     contactPerson: "jafar ms",
+//     email: "jafar@gmail.com",
+//     phone: "+91-98765-43212",
+//     investmentAmount: 750000,
+//     partnershipDate: "2023-09-10",
+//     address: "789 Finance Street, Delhi, DL 110001"
+//   },
+// ]
 
-// Enhanced Projects with more details
-const projects = [
-  { 
-    id: generateId(), 
-    name: "Residential Complex A", 
-    status: "Active", 
-    budget: 5000000, 
-    startDate: "2024-01-15",
-    description: "50-unit residential complex construction",
-    client: "Housing Development Board",
-    location: "Sector 21, Gurgaon"
-  },
-  { 
-    id: generateId(), 
-    name: "Commercial Mall Project", 
-    status: "Active", 
-    budget: 8500000, 
-    startDate: "2024-02-01",
-    description: "3-story commercial shopping mall",
-    client: "Retail Development Corp",
-    location: "MG Road, Bangalore"
-  },
-  { 
-    id: generateId(), 
-    name: "Highway Bridge Construction", 
-    status: "Planning", 
-    budget: 12000000, 
-    startDate: "2024-03-01",
-    description: "2km highway overbridge construction",
-    client: "State Highway Authority",
-    location: "NH-8, Rajasthan"
-  },
-  { 
-    id: generateId(), 
-    name: "Industrial Warehouse", 
-    status: "Completed", 
-    budget: 3500000, 
-    startDate: "2023-12-01",
-    description: "Large-scale industrial storage facility",
-    client: "Logistics Solutions Ltd",
-    location: "Industrial Park, Pune"
-  },
-]
+// // Enhanced Projects with more details
+// const projects = [
+//   { 
+//     id: generateId(), 
+//     name: "Residential Complex A", 
+//     status: "Active", 
+//     budget: 5000000, 
+//     startDate: "2024-01-15",
+//     description: "50-unit residential complex construction",
+//     client: "Housing Development Board",
+//     location: "Sector 21, Gurgaon"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Commercial Mall Project", 
+//     status: "Active", 
+//     budget: 8500000, 
+//     startDate: "2024-02-01",
+//     description: "3-story commercial shopping mall",
+//     client: "Retail Development Corp",
+//     location: "MG Road, Bangalore"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Highway Bridge Construction", 
+//     status: "Planning", 
+//     budget: 12000000, 
+//     startDate: "2024-03-01",
+//     description: "2km highway overbridge construction",
+//     client: "State Highway Authority",
+//     location: "NH-8, Rajasthan"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Industrial Warehouse", 
+//     status: "Completed", 
+//     budget: 3500000, 
+//     startDate: "2023-12-01",
+//     description: "Large-scale industrial storage facility",
+//     client: "Logistics Solutions Ltd",
+//     location: "Industrial Park, Pune"
+//   },
+// ]
 
-// Enhanced Vendors with construction-specific categories
-const vendors = [
-  {
-    id: generateId(),
-    name: "Steel Suppliers India Ltd",
-    companyName: "Steel Suppliers India Ltd",
-    email: "orders@steelsuppliers.com",
-    phone: "+91-11-2345-6789",
-    category: "Raw Materials",
-    address: "Steel Market, Sector 5, Industrial Area, Delhi",
-    taxId: "07AABCS1234F1Z5",
-    speciality: "TMT Bars, Steel Beams, Reinforcement Steel"
-  },
-  {
-    id: generateId(),
-    name: "Cement & Aggregates Co",
-    companyName: "Cement & Aggregates Co",
-    email: "sales@cementco.com",
-    phone: "+91-22-3456-7890",
-    category: "Building Materials",
-    address: "Cement Nagar, Thane, Mumbai, MH 400601",
-    taxId: "27AABCC5678G2Z1",
-    speciality: "Portland Cement, Sand, Gravel, Concrete Mix"
-  },
-  {
-    id: generateId(),
-    name: "Modern Equipment Rentals",
-    companyName: "Modern Equipment Rentals",
-    email: "rentals@modernequip.com",
-    phone: "+91-80-4567-8901",
-    category: "Equipment Rental",
-    address: "Equipment Hub, Whitefield, Bangalore, KA 560066",
-    taxId: "29AABCE9012H3Z7",
-    speciality: "Cranes, Excavators, Concrete Mixers, Generators"
-  },
-  {
-    id: generateId(),
-    name: "Labor Contractors Union",
-    companyName: "Labor Contractors Union",
-    email: "contracts@laborunion.com",
-    phone: "+91-33-5678-9012",
-    category: "Labor Services",
-    address: "Labor Colony, Salt Lake, Kolkata, WB 700091",
-    taxId: "19AABCL3456I4Z2",
-    speciality: "Skilled Workers, Masons, Electricians, Plumbers"
-  },
-  {
-    id: generateId(),
-    name: "Transport & Logistics Hub",
-    companyName: "Transport & Logistics Hub",
-    email: "bookings@transporthub.com",
-    phone: "+91-44-6789-0123",
-    category: "Transportation",
-    address: "Transport Nagar, Guindy, Chennai, TN 600032",
-    taxId: "33AABCT7890J5Z8",
-    speciality: "Heavy Vehicle Transport, Material Delivery, Site Logistics"
-  },
-  {
-    id: generateId(),
-    name: "Quality Testing Services",
-    companyName: "Quality Testing Services",
-    email: "tests@qualitytest.com",
-    phone: "+91-20-7890-1234",
-    category: "Testing & Quality",
-    address: "Testing Complex, Hinjewadi, Pune, MH 411057",
-    taxId: "27AABCQ1234K6Z3",
-    speciality: "Concrete Testing, Soil Testing, Material Quality Assurance"
-  },
-]
+// // Enhanced Vendors with construction-specific categories
+// const vendors = [
+//   {
+//     id: generateId(),
+//     name: "Steel Suppliers India Ltd",
+//     companyName: "Steel Suppliers India Ltd",
+//     email: "orders@steelsuppliers.com",
+//     phone: "+91-11-2345-6789",
+//     category: "Raw Materials",
+//     address: "Steel Market, Sector 5, Industrial Area, Delhi",
+//     taxId: "07AABCS1234F1Z5",
+//     speciality: "TMT Bars, Steel Beams, Reinforcement Steel"
+//   },
+//   {
+//     id: generateId(),
+//     name: "Cement & Aggregates Co",
+//     companyName: "Cement & Aggregates Co",
+//     email: "sales@cementco.com",
+//     phone: "+91-22-3456-7890",
+//     category: "Building Materials",
+//     address: "Cement Nagar, Thane, Mumbai, MH 400601",
+//     taxId: "27AABCC5678G2Z1",
+//     speciality: "Portland Cement, Sand, Gravel, Concrete Mix"
+//   },
+//   {
+//     id: generateId(),
+//     name: "Modern Equipment Rentals",
+//     companyName: "Modern Equipment Rentals",
+//     email: "rentals@modernequip.com",
+//     phone: "+91-80-4567-8901",
+//     category: "Equipment Rental",
+//     address: "Equipment Hub, Whitefield, Bangalore, KA 560066",
+//     taxId: "29AABCE9012H3Z7",
+//     speciality: "Cranes, Excavators, Concrete Mixers, Generators"
+//   },
+//   {
+//     id: generateId(),
+//     name: "Labor Contractors Union",
+//     companyName: "Labor Contractors Union",
+//     email: "contracts@laborunion.com",
+//     phone: "+91-33-5678-9012",
+//     category: "Labor Services",
+//     address: "Labor Colony, Salt Lake, Kolkata, WB 700091",
+//     taxId: "19AABCL3456I4Z2",
+//     speciality: "Skilled Workers, Masons, Electricians, Plumbers"
+//   },
+//   {
+//     id: generateId(),
+//     name: "Transport & Logistics Hub",
+//     companyName: "Transport & Logistics Hub",
+//     email: "bookings@transporthub.com",
+//     phone: "+91-44-6789-0123",
+//     category: "Transportation",
+//     address: "Transport Nagar, Guindy, Chennai, TN 600032",
+//     taxId: "33AABCT7890J5Z8",
+//     speciality: "Heavy Vehicle Transport, Material Delivery, Site Logistics"
+//   },
+//   {
+//     id: generateId(),
+//     name: "Quality Testing Services",
+//     companyName: "Quality Testing Services",
+//     email: "tests@qualitytest.com",
+//     phone: "+91-20-7890-1234",
+//     category: "Testing & Quality",
+//     address: "Testing Complex, Hinjewadi, Pune, MH 411057",
+//     taxId: "27AABCQ1234K6Z3",
+//     speciality: "Concrete Testing, Soil Testing, Material Quality Assurance"
+//   },
+// ]
 
-// Enhanced Workers with construction roles
-const workers = [
-  { 
-    id: generateId(), 
-    name: "Ramesh Kumar", 
-    role: "Site Engineer", 
-    email: "ramesh@company.com", 
-    dailyRate: 1500,
-    department: "Engineering",
-    joinDate: "2023-01-15",
-    speciality: "Structural Engineering, Site Supervision"
-  },
-  { 
-    id: generateId(), 
-    name: "Priya Sharma", 
-    role: "Project Manager", 
-    email: "priya@company.com", 
-    dailyRate: 2000,
-    department: "Management",
-    joinDate: "2022-11-10",
-    speciality: "Project Planning, Resource Management"
-  },
-  { 
-    id: generateId(), 
-    name: "Mohammed Ali", 
-    role: "Senior Mason", 
-    email: "mohammed@company.com", 
-    dailyRate: 800,
-    department: "Construction",
-    joinDate: "2023-03-20",
-    speciality: "Brick Work, Plastering, Finishing"
-  },
-  { 
-    id: generateId(), 
-    name: "Sunita Devi", 
-    role: "Safety Inspector", 
-    email: "sunita@company.com", 
-    dailyRate: 1200,
-    department: "Safety & Quality",
-    joinDate: "2023-05-12",
-    speciality: "Safety Compliance, Quality Control"
-  },
-  { 
-    id: generateId(), 
-    name: "Vijay Singh", 
-    role: "Equipment Operator", 
-    email: "vijay@company.com", 
-    dailyRate: 1000,
-    department: "Operations",
-    joinDate: "2023-02-28",
-    speciality: "Crane Operation, Heavy Machinery"
-  },
-]
+// // Enhanced Workers with construction roles
+// const workers = [
+//   { 
+//     id: generateId(), 
+//     name: "Ramesh Kumar", 
+//     role: "Site Engineer", 
+//     email: "ramesh@company.com", 
+//     dailyRate: 1500,
+//     department: "Engineering",
+//     joinDate: "2023-01-15",
+//     speciality: "Structural Engineering, Site Supervision"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Priya Sharma", 
+//     role: "Project Manager", 
+//     email: "priya@company.com", 
+//     dailyRate: 2000,
+//     department: "Management",
+//     joinDate: "2022-11-10",
+//     speciality: "Project Planning, Resource Management"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Mohammed Ali", 
+//     role: "Senior Mason", 
+//     email: "mohammed@company.com", 
+//     dailyRate: 800,
+//     department: "Construction",
+//     joinDate: "2023-03-20",
+//     speciality: "Brick Work, Plastering, Finishing"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Sunita Devi", 
+//     role: "Safety Inspector", 
+//     email: "sunita@company.com", 
+//     dailyRate: 1200,
+//     department: "Safety & Quality",
+//     joinDate: "2023-05-12",
+//     speciality: "Safety Compliance, Quality Control"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Vijay Singh", 
+//     role: "Equipment Operator", 
+//     email: "vijay@company.com", 
+//     dailyRate: 1000,
+//     department: "Operations",
+//     joinDate: "2023-02-28",
+//     speciality: "Crane Operation, Heavy Machinery"
+//   },
+// ]
 
-// Account categories for construction business
-const accountCategories = [
-  { id: generateId(), name: "Raw Materials", type: "Expense", description: "Steel, cement, sand, aggregates" },
-  { id: generateId(), name: "Equipment Rental", type: "Expense", description: "Construction equipment and machinery rental" },
-  { id: generateId(), name: "Labor Costs", type: "Expense", description: "Worker wages and contractor payments" },
-  { id: generateId(), name: "Project Revenue", type: "Income", description: "Client payments and project income" },
-  { id: generateId(), name: "Transportation", type: "Expense", description: "Material transport and logistics" },
-  { id: generateId(), name: "Utilities & Overhead", type: "Expense", description: "Site utilities, office expenses" },
-  { id: generateId(), name: "Professional Services", type: "Expense", description: "Engineering, legal, consulting services" },
-  { id: generateId(), name: "Equipment Purchase", type: "Asset", description: "Owned construction equipment and tools" },
-]
+// // Account categories for construction business
+// const accountCategories = [
+//   { id: generateId(), name: "Raw Materials", type: "Expense", description: "Steel, cement, sand, aggregates" },
+//   { id: generateId(), name: "Equipment Rental", type: "Expense", description: "Construction equipment and machinery rental" },
+//   { id: generateId(), name: "Labor Costs", type: "Expense", description: "Worker wages and contractor payments" },
+//   { id: generateId(), name: "Project Revenue", type: "Income", description: "Client payments and project income" },
+//   { id: generateId(), name: "Transportation", type: "Expense", description: "Material transport and logistics" },
+//   { id: generateId(), name: "Utilities & Overhead", type: "Expense", description: "Site utilities, office expenses" },
+//   { id: generateId(), name: "Professional Services", type: "Expense", description: "Engineering, legal, consulting services" },
+//   { id: generateId(), name: "Equipment Purchase", type: "Asset", description: "Owned construction equipment and tools" },
+// ]
 
-// Users in the system
-const users = [
-  { 
-    id: generateId(), 
-    name: "Admin User", 
-    email: "admin@construction.com", 
-    role: "Administrator",
-    department: "Management"
-  },
-  { 
-    id: generateId(), 
-    name: "Finance Manager", 
-    email: "finance@construction.com", 
-    role: "Finance",
-    department: "Finance"
-  },
-  { 
-    id: generateId(), 
-    name: "Site Supervisor", 
-    email: "supervisor@construction.com", 
-    role: "Operations",
-    department: "Site Operations"
-  },
-]
+// // Users in the system
+// const users = [
+//   { 
+//     id: generateId(), 
+//     name: "Admin User", 
+//     email: "admin@construction.com", 
+//     role: "Administrator",
+//     department: "Management"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Finance Manager", 
+//     email: "finance@construction.com", 
+//     role: "Finance",
+//     department: "Finance"
+//   },
+//   { 
+//     id: generateId(), 
+//     name: "Site Supervisor", 
+//     email: "supervisor@construction.com", 
+//     role: "Operations",
+//     department: "Site Operations"
+//   },
+// ]
 
 // Enhanced transactions with proper entity flow
 // const transactions = [
@@ -487,7 +487,12 @@ const users = [
 //     status: "Completed"
 //   },
 // ]
-
+const projects = []
+const vendors = []
+const workers = []
+const partners = []
+const accountCategories = []
+const users = []
 const transactions = []
 export const mockData = {
   transactions,

@@ -266,7 +266,7 @@ const vendors = useStore(state => state.vendors)
       )}
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -291,7 +291,7 @@ const vendors = useStore(state => state.vendors)
           </div>
         </div>
         
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        {/* <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-yellow-700">Outstanding Dues</p>
@@ -315,7 +315,7 @@ const vendors = useStore(state => state.vendors)
               <div className="w-6 h-6 bg-blue-600 rounded-full"></div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Transactions Table */}

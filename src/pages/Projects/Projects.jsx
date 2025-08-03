@@ -15,7 +15,8 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null)
 
   const getProjectTransactions = (projectId) => {
-    return transactions.filter((t) => t.projectId === projectId)
+    const projectTransactions =  transactions.filter((t) => t.linkedProject === projectId)
+    return projectTransactions
   }
 
   const columns = [

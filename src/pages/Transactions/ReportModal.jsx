@@ -28,7 +28,7 @@ const ReportModal = ({ transactions, onClose }) => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div className="card p-4">
           <h4 className="text-sm font-medium text-slate-600">Total Income</h4>
           <p className="text-2xl font-bold text-green-600">${totalIncome.toLocaleString()}</p>
