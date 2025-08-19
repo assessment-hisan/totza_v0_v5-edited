@@ -1,7 +1,6 @@
-"use client"
 import { useState, useMemo } from "react"
 import { useStore } from "../../stores/useStore"
-import { Download } from "lucide-react"
+import { Download, Search } from "lucide-react"
 import Modal from "../../components/Modal"
 import AddPaymentForm from "./AddPaymentForm"
 import { format } from "date-fns"
@@ -16,6 +15,13 @@ const Dues = () => {
   const [paymentHistoryModal, setPaymentHistoryModal] = useState(null)
   const [detailModal, setDetailModal] = useState(null)
   const [activeTab, setActiveTab] = useState("history")
+  const [filters, setFilters] = useState({
+    search: "",
+    status: "",
+    dateFrom: "",
+    dateTo: ""
+  })
+
 
   /* ---------- helpers ---------- */
   const safeFmt = (d) =>
@@ -58,6 +64,9 @@ const Dues = () => {
     () => transactions.filter((t) => t.type === "Due"),
     [transactions]
   )
+const duesPaymentsLength = useMemo(() => {
+  return dues.reduce((sum, d) => sum + (d.payments?.length || 0), 0)
+}, [dues])
 
   const payments = useMemo(() => {
     return dues
@@ -80,6 +89,58 @@ const Dues = () => {
     () => dues.reduce((s, d) => s + (getDuePaidAmount(d) || 0), 0),
     [dues]
   )
+
+  /* ---------- filtering ---------- */
+  const filteredDues = useMemo(() => {
+    return dues.filter(due => {
+      // Search filter
+      if (filters.search && 
+          !due.description.toLowerCase().includes(filters.search.toLowerCase()) &&
+          !due.category?.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false
+      }
+      
+      // Status filter
+      if (filters.status && getDueStatus(due) !== filters.status) {
+        return false
+      }
+      
+      // Date range filter
+      if (filters.dateFrom && new Date(due.date) < new Date(filters.dateFrom)) {
+        return false
+      }
+      if (filters.dateTo && new Date(due.date) > new Date(filters.dateTo)) {
+        return false
+      }
+      
+      return true
+    })
+  }, [dues, filters, getDueStatus])
+
+  const filteredPayments = useMemo(() => {
+    return payments.filter(payment => {
+      // Search filter
+      if (filters.search && 
+          !payment.description.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false
+      }
+      
+      // Status filter
+      if (filters.status && payment.status !== filters.status) {
+        return false
+      }
+      
+      // Date range filter
+      if (filters.dateFrom && new Date(payment.date) < new Date(filters.dateFrom)) {
+        return false
+      }
+      if (filters.dateTo && new Date(payment.date) > new Date(filters.dateTo)) {
+        return false
+      }
+      
+      return true
+    })
+  }, [payments, filters])
 
   /* ---------- table columns ---------- */
   const columns = [
@@ -137,13 +198,88 @@ const Dues = () => {
     },
   ]
 
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+
+  const clearFilters = () => {
+    setFilters({
+      search: "",
+      status: "",
+      dateFrom: "",
+      dateTo: ""
+    })
+  }
+
+  const FilterComponent = () => (
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+      <div className="md:col-span-2 relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={16} />
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full pl-10 pr-4 py-2 border rounded-lg"
+          value={filters.search}
+          onChange={(e) => handleFilterChange('search', e.target.value)}
+        />
+      </div>
+      
+      <select
+        className="w-full px-3 py-2 border rounded-lg"
+        value={filters.status}
+        onChange={(e) => handleFilterChange('status', e.target.value)}
+      >
+        <option value="">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Partially Paid">Partially Paid</option>
+        <option value="Fully Paid">Fully Paid</option>
+      </select>
+      
+      <input
+        type="date"
+        className="w-full px-3 py-2 border rounded-lg"
+        value={filters.dateFrom}
+        onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
+        placeholder="From"
+      />
+      
+      <input
+        type="date"
+        className="w-full px-3 py-2 border rounded-lg"
+        value={filters.dateTo}
+        onChange={(e) => handleFilterChange('dateTo', e.target.value)}
+        placeholder="To"
+      />
+      
+      {(filters.search || filters.status || filters.dateFrom || filters.dateTo) && (
+        <div className="md:col-span-5">
+          <button 
+            onClick={clearFilters}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Clear all filters
+          </button>
+        </div>
+      )}
+    </div>
+  )
+
   return (
     <div className="space-y-8">
       {/* summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card p-4">
-          <h4 className="text-sm font-medium text-slate-600">Total Dues</h4>
+        <div className="card p-4 flex gap-20">
+          <div>
+            <h4 className="text-sm font-medium text-slate-600">Total Dues</h4>
           <p className="text-2xl font-bold">{dues.length}</p>
+          </div>
+           <div>
+            <h4 className="text-sm font-medium text-slate-600">Total payments</h4>
+          <p className="text-2xl font-bold">{duesPaymentsLength}</p>
+          </div>
         </div>
         <div className="card p-4">
           <h4 className="text-sm font-medium text-slate-600">Total Amount Due</h4>
@@ -184,25 +320,29 @@ const Dues = () => {
           </button>
         </div>
 
+        {/* Filter Component */}
+        <FilterComponent />
+
         {/* Transaction History Tab */}
         {activeTab === "history" && (
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-slate-800">Payments</h2>
               <button
-                onClick={() => generateTransactionsPDF(payments, "PaymentHistory")}
+                onClick={() => generateTransactionsPDF(filteredPayments, "PaymentHistory")}
                 className="btn-secondary flex items-center gap-2"
+                disabled={filteredPayments.length === 0}
               >
                 <Download size={16} />
                 Export PDF
               </button>
             </div>
 
-            {payments.length === 0 ? (
+            {filteredPayments.length === 0 ? (
               <p className="text-slate-500 italic">No payments recorded yet.</p>
             ) : (
               <div className="space-y-3">
-                {payments.map((p, i) => (
+                {filteredPayments.map((p, i) => (
                   <div
                     key={i}
                     className="flex justify-between items-center border-b pb-2"
@@ -234,8 +374,9 @@ const Dues = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-slate-800">All Dues</h2>
               <button
-                onClick={() => generateTransactionsPDF(dues, "DuesReport")}
+                onClick={() => generateTransactionsPDF(filteredDues, "DuesReport")}
                 className="btn-secondary flex items-center gap-2"
+                disabled={filteredDues.length === 0}
               >
                 <Download size={16} />
                 Export PDF
@@ -243,8 +384,8 @@ const Dues = () => {
             </div>
             <Table
               columns={columns}
-              data={dues}
-              onRowClick={(row) => setDetailModal(row)} // <-- row click opens detail modal
+              data={filteredDues}
+              onRowClick={(row) => setDetailModal(row)}
             />
           </div>
         )}
