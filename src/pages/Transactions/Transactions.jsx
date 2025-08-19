@@ -44,19 +44,20 @@ const vendors = useStore(state => state.vendors)
   const filteredTransactions = useMemo(() => {
     return transactions.filter((transaction) => {
       // Type filter
+      console.log(filters.partner , transaction )
       if (filters.type && transaction.type !== filters.type) return false
       
       // Partner filter
-      if (filters.partner && transaction.partnerId !== filters.partner) return false
+      if (filters.partner && transaction.linkedPartner !== filters.partner) return false
       
       // Project filter
-      if (filters.project && transaction.projectId !== filters.project) return false
+      if (filters.project && transaction.linkedProject !== filters.project) return false
       
       // Vendor filter
-      if (filters.vendor && transaction.vendorId !== filters.vendor) return false
+      if (filters.vendor && transaction.linkedVendor !== filters.vendor) return false
       
       // Worker filter
-      if (filters.worker && transaction.workerId !== filters.worker) return false
+      if (filters.worker && transaction.linkedWorker !== filters.worker) return false
       
       // Search filter
       if (filters.search) {

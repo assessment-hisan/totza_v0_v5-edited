@@ -5,6 +5,7 @@ const TransactionFilters = ({ filters, setFilters }) => {
   const { projects, vendors, workers, partners } = useStore()
 
   const handleFilterChange = (key, value) => {
+    console.log(key, value)
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -28,9 +29,7 @@ const TransactionFilters = ({ filters, setFilters }) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="font-medium text-slate-800">Filters</h4>
-        <button onClick={clearFilters} className="text-sm text-sky-600 hover:text-sky-700">
-          Clear All
-        </button>
+        
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -49,8 +48,8 @@ const TransactionFilters = ({ filters, setFilters }) => {
           <label className="block text-sm font-medium text-slate-700 mb-1">Type</label>
           <select value={filters.type} onChange={(e) => handleFilterChange("type", e.target.value)} className="input">
             <option value="">All Types</option>
-            <option value="Income">Income</option>
-            <option value="Expense">Expense</option>
+            <option value="Credit">Income</option>
+            <option value="Debit">Expense</option>
             <option value="Due">Due</option>
             <option value="Loan">Loan</option>
           </select>
