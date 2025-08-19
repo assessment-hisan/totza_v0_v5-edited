@@ -1,19 +1,19 @@
-import { useStore } from "../../stores/useStore"
-import ChartCard from "../../components/ChartCard"
-import { Doughnut, Bar } from "react-chartjs-2"
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js"
+import { useStore } from "../../stores/useStore";
+import ChartCard from "../../components/ChartCard";
+import { Doughnut, Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const Charts = () => {
-  const { transactions, partners } = useStore()
+  const { transactions, partners } = useStore();
 
   // Inflow vs Outflow Donut
-  const totalInflow = transactions.filter((t) => t.type === "Credit").reduce((sum, t) => sum + t.amount, 0)
+  const totalInflow = transactions.filter((t) => t.type === "Credit").reduce((sum, t) => sum + t.amount, 0);
 
   const totalOutflow = transactions
     .filter((t) => ["Debit", "Due"].includes(t.type))
-    .reduce((sum, t) => sum + t.amount, 0)
+    .reduce((sum, t) => sum + t.amount, 0);
 
   const inflowOutflowData = {
     labels: ["Inflow", "Outflow"],
@@ -24,13 +24,13 @@ const Charts = () => {
         borderWidth: 0,
       },
     ],
-  }
+  };
 
   // Transaction Type Bar
-  const transactionTypes = ["Credit", "Debit", "Due", "Loan"]
+  const transactionTypes = ["Credit", "Debit", "Due", "Loan"];
   const typeData = transactionTypes.map((type) =>
     transactions.filter((t) => t.type === type).reduce((sum, t) => sum + t.amount, 0),
-  )
+  );
 
   const transactionTypeData = {
     labels: transactionTypes,
@@ -42,31 +42,44 @@ const Charts = () => {
         borderWidth: 0,
       },
     ],
-  }
+  };
 
   // Partner Activity Bar
   const partnerActivity = partners
     .map((partner) => {
-      const partnerTransactions = transactions.filter((t) => t.partnerId === partner.id)
-      const total = partnerTransactions.reduce((sum, t) => sum + t.amount, 0)
+      const partnerTransactions = transactions.filter((t) => t.linkedPartner === partner.id);
+
+      const debits = partnerTransactions.filter((t) => t.type === "Debit").reduce((sum, t) => sum + t.amount, 0);
+      const credits = partnerTransactions.filter((t) => t.type === "Credit").reduce((sum, t) => sum + t.amount, 0);
+
+      const total = partnerTransactions.reduce((sum, t) => sum + t.amount, 0);
+
       return {
         name: partner.name.length > 16 ? partner.name.substring(0, 16) + "..." : partner.name,
         amount: total,
-      }
+        credits: credits,
+        debits: debits,
+      };
     })
-    .filter((p) => p.amount > 0)
+    .filter((p) => p.amount > 0);
 
   const partnerActivityData = {
     labels: partnerActivity.map((p) => p.name),
     datasets: [
       {
-        label: "Transaction Amount",
-        data: partnerActivity.map((p) => p.amount),
+        label: "Debit",
+        data: partnerActivity.map((p) => p.debits),
+        backgroundColor: "#e73810ff",
+        borderWidth: 0,
+      },
+      {
+        label: "Credit",
+        data: partnerActivity.map((p) => p.credits),
         backgroundColor: "#0ea5e9",
         borderWidth: 0,
       },
     ],
-  }
+  };
 
   const chartOptions = {
     responsive: true,
@@ -83,7 +96,7 @@ const Charts = () => {
         borderWidth: 1,
       },
     },
-  }
+  };
 
   const barOptions = {
     ...chartOptions,
@@ -95,7 +108,7 @@ const Charts = () => {
         },
       },
     },
-  }
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -111,7 +124,7 @@ const Charts = () => {
         <Bar data={partnerActivityData} options={barOptions} />
       </ChartCard>
     </div>
-  )
-}
+  );
+};
 
-export default Charts
+export default Charts;
