@@ -112,10 +112,10 @@ const vendors = useStore(state => state.vendors)
       
       switch (transaction.type) {
         case 'Debit':
-          acc.income += amount
+          acc.expense += amount
           break
         case 'Credit':
-          acc.expense += amount
+          acc.income += amount
           break
         case 'Due':
           acc.due += amount
