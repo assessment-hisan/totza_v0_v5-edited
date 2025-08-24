@@ -47,12 +47,12 @@ export const buildPartnerData = (partners, transactions, projectId) => {
   return partners.map((partner) => {
     // Partner investments: Credit transactions linked to this partner and project
     const investments = projectTransactions
-      .filter(t => t.linkedPartner === partner.id && t.type === "Credit")
+      .filter(t => t.linkedPartner === partner.id && t.type === "Debit")
       .reduce((sum, t) => sum + t.amount, 0);
     
     // Partner receipts: Debit transactions linked to this partner and project
     const receipts = projectTransactions
-      .filter(t => t.linkedPartner === partner.id && t.type === "Debit")
+      .filter(t => t.linkedPartner === partner.id && t.type === "Credit")
       .reduce((sum, t) => sum + t.amount, 0);
     
     return {
