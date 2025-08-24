@@ -70,7 +70,7 @@ export const buildPartnerData = (partners, transactions, projectId) => {
   return partners.map((partner) => {
     // Partner investments: Debit transactions linked to this partner and project
     // with no linked vendor or worker (empty strings)
-    const investments = projectTransactions
+    const payments = projectTransactions
       .filter(t => 
         t.linkedPartner === partner.id && 
         t.type === "Debit" && 
@@ -86,11 +86,12 @@ export const buildPartnerData = (partners, transactions, projectId) => {
 
     // Partner payments: Debit transactions linked to this partner and project
     // with linked vendor or worker (not empty strings)
-    const payments = projectTransactions
+    const investments = projectTransactions
       .filter(t => 
         t.linkedPartner === partner.id && 
         t.type === "Debit" && 
         (t.linkedVendor !== "" || t.linkedWorker !== "")
+        && t.linkedProject !== ""
       )
       .reduce((sum, t) => sum + t.amount, 0);
 
