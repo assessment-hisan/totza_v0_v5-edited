@@ -63,32 +63,46 @@ export const calculateSummaries = (transactions) => {
 //   }).filter(partner => partner.investments > 0 || partner.receipts > 0); // Only include partners with data
 // };
 
-export const buildPartnerData = (partners = [], transactions = [], projectId) => {
-  // Only project-scoped transactions
+export const buildPartnerData = (partners, transactions, projectId) => {
+  // Filter transactions for this specific project
   const projectTransactions = transactions.filter(t => t.linkedProject === projectId);
 
-  return partners
-    .map((partner) => {
-      // Investments: Credits linked to this partner (partner → company)
-      const investments = projectTransactions
-        .filter(t => t.linkedPartner === partner.id && t.type === "Credit")
-        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+  return partners.map((partner) => {
+    // Partner investments: Debit transactions linked to this partner and project
+    // with no linked vendor or worker (empty strings)
+    const investments = projectTransactions
+      .filter(t => 
+        t.linkedPartner === partner.id && 
+        t.type === "Debit" && 
+        t.linkedVendor === "" && 
+        t.linkedWorker === ""
+      )
+      .reduce((sum, t) => sum + t.amount, 0);
 
-      // Receipts (payouts to partner): Debits linked to this partner (company → partner)
-      const receipts = projectTransactions
-        .filter(t => t.linkedPartner === partner.id && ["Debit", "Due"].includes(t.type))
-        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+    // Partner receipts: Credit transactions linked to this partner and project
+    // const receipts = projectTransactions
+    //   .filter(t => t.linkedPartner === partner.id && t.type === "Credit")
+    //   .reduce((sum, t) => sum + t.amount, 0);
 
-      return {
-        id: partner.id,
-        name: partner.name,
-        investments,
-        receipts,
-        net: investments - receipts, // positive => net investor, negative => net recipient
-      };
-    })
-    .filter(p => p.investments > 0 || p.receipts > 0); // only partners with activity
+    // Partner payments: Debit transactions linked to this partner and project
+    // with linked vendor or worker (not empty strings)
+    const payments = projectTransactions
+      .filter(t => 
+        t.linkedPartner === partner.id && 
+        t.type === "Debit" && 
+        (t.linkedVendor !== "" || t.linkedWorker !== "")
+      )
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    return {
+      name: partner.name,
+      investments,
+      receipts : payments
+     
+    };
+  }).filter(partner => partner.investments > 0 || partner.receipts > 0 || partner.payments > 0); // Only include partners with data
 };
+
 export const buildVendorData = (vendors, transactions, projectId) => {
   // Filter transactions for this specific project
   const projectTransactions = transactions.filter(t => t.linkedProject === projectId);
@@ -122,3 +136,8 @@ export const buildWorkerData = (workers, transactions, projectId) => {
     };
   }).filter(worker => worker.payments > 0); // Only include workers with payments
 };
+
+
+
+
+
